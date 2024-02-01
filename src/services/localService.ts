@@ -9,7 +9,7 @@ export let localService = {
     return JSON.parse(data);
   },
   remove: () => {
-    localStorage.removeItem("USER");
+    localStorage.removeItem(KEY);
     window.location.reload();
   },
 };

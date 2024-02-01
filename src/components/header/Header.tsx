@@ -8,7 +8,7 @@ import { getImgSearch } from "../../redux/slice/searchImgSlice";
 export const Header: React.FC = () => {
   const dispatch = useDispatch<any>();
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    dispatch(getImgSearch(e.currentTarget.value));
+    dispatch(getImgSearch(e.target.value));
   };
 
   return (
