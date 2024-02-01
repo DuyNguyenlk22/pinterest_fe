@@ -1,37 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { getListImg } from "../../services/api";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Skeleton } from "antd";
-import { imgProp } from "../../model/imageInterface";
+import { ImgProp } from "../../model/imageInterface";
 import { getAllImg } from "../../redux/slice/listImgSlice";
 import { ThunkDispatch } from "@reduxjs/toolkit";
+import { localService } from "../../services/localService";
 
 const HomePage: React.FC = () => {
-  const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
+  useEffect(() => {
+    if (!localService.get()) {
+      window.location.href = "/auth/register";
+    }
+  }, []);
   let [loading, setLoading] = useState<boolean>(true);
-  // let [listImg, setListImg] = useState<Array<imgProp>>([]);
-  let { imgSearch, isSearch } = useSelector((state: any) => state.searchImgSlice);
+  const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   let { listImg } = useSelector((state: any) => state.listImgSlice);
-  console.log("😐 ~ listImg:👉", listImg);
+  let { imgSearch, isSearch } = useSelector((state: any) => state.searchImgSlice);
 
   let data = isSearch ? imgSearch : listImg;
 
-  // useEffect(() => {
-  //   let listImg = async () => {
-  //     try {
-  //       let res = await getListImg();
-  //       dispatch(setListImage(res.data.content));
-  //       setTimeout(() => {
-  //         setListImg(res.data.content);
-  //         setLoading(false);
-  //       }, 2000);
-  //     } catch (error: any) {
-  //       throw new Error(`${error.message}`);
-  //     }
-  //   };
-  //   listImg();
-  // }, []);
   useEffect(() => {
     dispatch(getAllImg());
     setTimeout(() => {
@@ -45,7 +33,7 @@ const HomePage: React.FC = () => {
         ? Array.from({ length: 50 }, (_, index: number) => {
             return <Skeleton active key={index} />;
           })
-        : data?.map((item: imgProp) => {
+        : data?.map((item: ImgProp) => {
             return (
               <NavLink to={`/info-img/${item.hinh_id}`} key={item.hinh_id}>
                 <img

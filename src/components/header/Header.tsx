@@ -1,15 +1,58 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
-import { Avatar, ConfigProvider, Input } from "antd";
+import { NavLink, useNavigate } from "react-router-dom";
+import { Avatar, ConfigProvider, Dropdown, Input, Tooltip } from "antd";
 import { UserOutlined, DownOutlined, SearchOutlined } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getImgSearch } from "../../redux/slice/searchImgSlice";
+import { localService } from "../../services/localService";
+import type { MenuProps } from "antd";
 
 export const Header: React.FC = () => {
   const dispatch = useDispatch<any>();
+  const navigate = useNavigate();
+  let { infoUser } = useSelector((state: any) => state.userSlice);
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     dispatch(getImgSearch(e.target.value));
   };
+  const items: MenuProps["items"] = [
+    {
+      label: (
+        <div>
+          <p>Đang đăng nhập</p>
+          <div className='flex items-center mt-3'>
+            <div className='w-8 h-8 rounded-full mr-3'>
+              <Avatar size={30} icon={<UserOutlined />} />
+            </div>
+            <div>
+              <p>{infoUser.ho_ten}</p>
+              <p>Cá nhân</p>
+              <p>{infoUser.email}</p>
+            </div>
+            <div>
+              <i className='fa-solid fa-check'></i>
+            </div>
+          </div>
+        </div>
+      ),
+      key: "0",
+    },
+    {
+      label: (
+        <button
+          className='text-semibold'
+          onClick={() => {
+            localService.remove();
+            setTimeout(() => {
+              window.location.reload();
+              navigate("/auth/login");
+            }, 1500);
+          }}>
+          Đăng xuất
+        </button>
+      ),
+      key: "1",
+    },
+  ];
 
   return (
     <div className='py-2 px-4'>
@@ -21,7 +64,7 @@ export const Header: React.FC = () => {
           <NavLink to={"/"}>Trang chủ</NavLink>
         </div>
         <div className='font-semibold'>
-          <NavLink to={"/"}>Tạo</NavLink>
+          <NavLink to={"/createImg"}>Tạo</NavLink>
         </div>
         <div className='min-w-[407px] flex-auto'>
           <ConfigProvider
@@ -41,9 +84,17 @@ export const Header: React.FC = () => {
         <div className='flex items-center space-x-4 w-[10rem] justify-end text-[#5F5F5F]'>
           <i className='fa-solid fa-bell w-6 text-2xl '></i>
           <i className='fa-solid fa-comment-dots w-6 text-2xl'></i>
-          <Avatar size={30} icon={<UserOutlined />} />
+          <NavLink to={"/personal"}>
+            <Avatar size={30} icon={<UserOutlined />} />
+          </NavLink>
           <button>
-            <DownOutlined />
+            <Tooltip placement='bottom' title={<p>Tài khoản và các tuỳ chọn khác</p>}>
+              <Dropdown menu={{ items }} trigger={["click"]}>
+                <a onClick={(e) => e.preventDefault()}>
+                  <DownOutlined />
+                </a>
+              </Dropdown>
+            </Tooltip>
           </button>
         </div>
       </div>

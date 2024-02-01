@@ -1,64 +1,46 @@
 import React, { useEffect, useState } from "react";
 import { useParams, NavLink } from "react-router-dom";
 import { getDetailImg } from "../../services/api";
-import { imgProp } from "../../model/imageInterface";
-import type { CollapseProps } from "antd";
-import { Collapse, ConfigProvider, Input } from "antd";
-import { useSelector } from "react-redux";
-
-const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
-
-const items: CollapseProps["items"] = [
-  {
-    key: "1",
-    label: "This is panel header 1",
-    children: (
-      <>
-        <p>{text}</p>
-        <p>{text}</p>
-        <p>{text}</p>
-      </>
-    ),
-  },
-];
+import { DetailImgProps, ImgProp } from "../../model/imageInterface";
+import { useDispatch, useSelector } from "react-redux";
+import { ThunkDispatch } from "@reduxjs/toolkit";
+import { getAllImg } from "../../redux/slice/listImgSlice";
+import { ListComment } from "./ListComment";
+import { Input } from "antd";
 
 export const InfoImage: React.FC = () => {
   const { id } = useParams<string>();
-  const [infoImg, setInfoImg] = useState<imgProp | null>(null);
-  const { listImg } = useSelector((state: any) => state.listImgSlice);
-  console.log("😐 ~ infoImg:👉", infoImg);
+  const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
+  const [infoImg, setInfoImg] = useState<DetailImgProps | null>(null);
+  let { listImg } = useSelector((state: any) => state.listImgSlice);
+  let { quantityCmt } = useSelector((state: any) => state.commentSlice);
+
+  const getInfoImg = async () => {
+    try {
+      let res = await getDetailImg(id);
+      setInfoImg(res.data.content);
+    } catch (error: any) {
+      throw new Error(`${error.message}`);
+    }
+  };
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+    try {
+      // let res = await
+    } catch (error) {}
+  };
 
   useEffect(() => {
-    let getInfoImg = async () => {
-      try {
-        let res = await getDetailImg(id);
-        setInfoImg(res.data.content);
-      } catch (error: any) {
-        throw new Error(`${error.message}`);
-      }
-    };
     getInfoImg();
-  }, [id]);
-
-  const onChange = (key: string | string[]) => {
-    console.log(key);
-  };
+    dispatch(getAllImg());
+  }, [dispatch, id]);
 
   return (
     <div className='my-10'>
-      <div className='containerInfo max-h-[1200px] rounded-3xl shadow-xl'>
-        <div className='grid grid-cols-2'>
-          <img
-            src='https://i.pinimg.com/736x/c1/7d/fd/c17dfd78bd446e3da742212566411f95.jpg'
-            alt='img'
-            className='rounded-s-3xl'
-          />
+      <div className='containerInfo  rounded-3xl shadow-xl'>
+        <div className='grid grid-cols-2 max-h-[1500px]'>
+          <img src={infoImg?.duong_dan} alt={infoImg?.duong_dan} className='rounded-s-3xl w-full' />
           <div className='flex flex-col justify-between'>
-            <div className='flex flex-col space-y-8 p-8'>
+            <div className='flex flex-col space-y-8 p-8 overflow-y-auto'>
               <div className='flex justify-between items-center sticky top-0 bg-white z-10'>
                 <div className='text-2xl font-bold'>
                   <i className='fa-solid fa-arrow-up-from-bracket'></i>
@@ -73,59 +55,37 @@ export const InfoImage: React.FC = () => {
                   </button>
                 </div>
               </div>
+              <div>
+                <h1 className='text-2xl font-semibold'>{infoImg?.ten_hinh}</h1>
+              </div>
               <div className='flex items-center justify-between '>
                 <div className='flex items-center justify-between'>
                   <img
-                    src='https://i.pinimg.com/736x/c1/7d/fd/c17dfd78bd446e3da742212566411f95.jpg'
-                    alt='...'
+                    src={infoImg?.nguoi_dung.anh_dai_dien}
+                    alt='avatar'
                     className='rounded-full w-10 h-10 mr-3'
                   />
-                  <p>Tên</p>
+                  <p>{infoImg?.nguoi_dung.ho_ten}</p>
                 </div>
                 <button className='px-4 py-3 font-semibold bg-slate-100 hover:bg-slate-200 duration-300 rounded-3xl'>
                   Theo dõi
                 </button>
               </div>
-              <div>
-                <ConfigProvider
-                  theme={{
-                    components: {
-                      Collapse: {
-                        headerPadding: "0px",
-                        contentPadding: "0px",
-                      },
-                    },
-                  }}>
-                  <Collapse
-                    expandIconPosition='end'
-                    items={items}
-                    ghost
-                    onChange={onChange}
-                    expandIcon={(e) => {
-                      const { isActive } = e;
-                      return (
-                        <span>
-                          {isActive ? (
-                            <i className='angle fa-solid fa-angle-up font-bold text-xl'></i>
-                          ) : (
-                            <i className='angle fa-solid fa-angle-down font-bold text-xl'></i>
-                          )}
-                        </span>
-                      );
-                    }}
-                  />
-                </ConfigProvider>
-              </div>
+              <ListComment />
             </div>
             <div className='bg-white border-t-2 border-gray-100 p-8 sticky bottom-0 rounded-ee-3xl'>
-              <p className='text-xl font-semibold'>4 Nhận xét</p>
+              <p className='text-xl font-semibold'>{quantityCmt} Nhận xét</p>
               <div className='flex space-x-3 mt-4'>
                 <img
                   src='https://i.pinimg.com/736x/c1/7d/fd/c17dfd78bd446e3da742212566411f95.jpg'
                   alt='...'
                   className='rounded-full w-10 h-10 '
                 />
-                <Input placeholder='Thêm nhận xét' suffix={<span className='text-xl'>😀</span>} />
+                <Input
+                  placeholder='Thêm nhận xét'
+                  onChange={handleChange}
+                  suffix={<button className='text-xl hover:animate-bounce duration-150'>😀</button>}
+                />
               </div>
             </div>
           </div>
@@ -133,18 +93,19 @@ export const InfoImage: React.FC = () => {
       </div>
       <h1 className='my-8 text-center font-semibold text-2xl'>Thêm nội dung để khám phá</h1>
       <div className='columns-5'>
-        {listImg?.map((item: imgProp) => {
-          return (
-            <NavLink to={`/info-img/${item.hinh_id}`} key={item.hinh_id}>
-              <img
-                loading='lazy'
-                src={item.duong_dan}
-                alt={item.ten_hinh}
-                className='p-2 w-full rounded-2xl'
-              />
-            </NavLink>
-          );
-        })}
+        {listImg &&
+          listImg.map((item: ImgProp) => {
+            return (
+              <NavLink to={`/info-img/${item.hinh_id}`} key={item.hinh_id}>
+                <img
+                  loading='lazy'
+                  src={item.duong_dan}
+                  alt={item.ten_hinh}
+                  className='p-2 w-full rounded-2xl'
+                />
+              </NavLink>
+            );
+          })}
       </div>
     </div>
   );

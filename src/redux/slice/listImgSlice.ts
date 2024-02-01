@@ -1,9 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { getListImg } from '../../services/api'
-import { imgProp } from '../../model/imageInterface'
+import { ListImgState } from '../../model/imageInterface'
 
-const initialState = {
-    listImg: Array<imgProp>
+
+
+const initialState: ListImgState = {
+    listImg: null
 }
 
 export const getAllImg = createAsyncThunk("listImg",
