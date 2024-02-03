@@ -24,9 +24,9 @@ export const Header: React.FC = () => {
               <Avatar size={30} icon={<UserOutlined />} />
             </div>
             <div>
-              <p>{infoUser.ho_ten}</p>
+              <p>{infoUser?.ho_ten}</p>
               <p>Cá nhân</p>
-              <p>{infoUser.email}</p>
+              <p>{infoUser?.email}</p>
             </div>
             <div>
               <i className='fa-solid fa-check'></i>
@@ -42,8 +42,8 @@ export const Header: React.FC = () => {
           className='text-semibold'
           onClick={() => {
             localService.remove();
+            window.location.reload();
             setTimeout(() => {
-              window.location.reload();
               navigate("/auth/login");
             }, 1500);
           }}>
@@ -55,7 +55,7 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <div className='py-2 px-4'>
+    <div className='py-2 px-4 sticky top-0 left-0 right-0 z-100 bg-white'>
       <div className=' flex items-center h-14 space-x-3'>
         <NavLink to={"/"}>
           <img src='/img/icons-pinterest.png' alt='logo' className='w-[30px] h-[30px]' />

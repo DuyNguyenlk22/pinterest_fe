@@ -75,7 +75,7 @@ export const Login: React.FC = () => {
               },
             ]}
             hasFeedback>
-            <Input.Password placeholder='Create a password' />
+            <Input.Password placeholder='Password' />
           </Form.Item>
 
           <Form.Item>

@@ -1,52 +1,65 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "./App.scss";
+import React from "react";
 import HomePage from "./page/Home/HomePage";
 import { Layout } from "./template/Layout";
-import React from "react";
 import { InfoImage } from "./page/InfoImage/InfoImage";
 import { Login } from "./page/Login/Login";
 import { Register } from "./page/Register/Register";
 import { CreateImg } from "./page/CreateImg/CreateImg";
 import { InfoUser } from "./page/InfoUser/InfoUser";
+import "./App.scss";
+import { InfoSettings } from "./page/InfoSettings/InfoSettings";
 
-let data = [
-  {
-    path: "/",
-    element: (
-      <Layout>
-        <HomePage />
-      </Layout>
-    ),
-  },
-  {
-    path: "/info-img/:id",
-    element: (
-      <Layout>
-        <InfoImage />
-      </Layout>
-    ),
-  },
-  { path: "/auth/login", element: <Login /> },
-  { path: "/auth/register", element: <Register /> },
-  {
-    path: "/createImg",
-    element: (
-      <Layout>
-        <CreateImg />
-      </Layout>
-    ),
-  },
-  {
-    path: "/personal",
-    element: (
-      <Layout>
-        <InfoUser />
-      </Layout>
-    ),
-  },
-];
+interface dataProps {
+  path: string;
+  element: React.ReactNode;
+}
 
 export const App: React.FC = () => {
+  const data: dataProps[] = [
+    {
+      path: "/",
+      element: (
+        <Layout>
+          <HomePage />
+        </Layout>
+      ),
+    },
+    {
+      path: "/info-img/:id",
+      element: (
+        <Layout>
+          <InfoImage />
+        </Layout>
+      ),
+    },
+    { path: "/auth/login", element: <Login /> },
+    { path: "/auth/register", element: <Register /> },
+    {
+      path: "/createImg",
+      element: (
+        <Layout>
+          <CreateImg />
+        </Layout>
+      ),
+    },
+    {
+      path: "/personal",
+      element: (
+        <Layout>
+          <InfoUser />
+        </Layout>
+      ),
+    },
+    {
+      path: "/settings",
+      element: (
+        <Layout>
+          <InfoSettings />
+        </Layout>
+      ),
+    },
+  ];
   return (
     <>
       <BrowserRouter>

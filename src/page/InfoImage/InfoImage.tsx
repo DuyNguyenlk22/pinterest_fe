@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, NavLink } from "react-router-dom";
-import { getDetailImg } from "../../services/api";
+import { getDetailImg, imgSaved } from "../../services/api";
 import { DetailImgProps, ImgProp } from "../../model/imageInterface";
 import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -23,24 +23,33 @@ export const InfoImage: React.FC = () => {
       throw new Error(`${error.message}`);
     }
   };
-  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+  const getImgSaved = async () => {
     try {
-      // let res = await
-    } catch (error) {}
+      let res = await imgSaved(id);
+      console.log("😐 ~ getImgSaved ~ res:👉", res);
+    } catch (error: any) {
+      console.log("😐 ~ getImgSaved ~ error:👉", error);
+      // throw new Error(`${error.message}`);
+    }
+  };
+
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("😐 ~ handleChange ~ e:👉", e.target.value);
   };
 
   useEffect(() => {
     getInfoImg();
+    getImgSaved();
     dispatch(getAllImg());
   }, [dispatch, id]);
 
   return (
     <div className='my-10'>
       <div className='containerInfo  rounded-3xl shadow-xl'>
-        <div className='grid grid-cols-2 max-h-[1500px]'>
+        <div className='grid grid-cols-2 '>
           <img src={infoImg?.duong_dan} alt={infoImg?.duong_dan} className='rounded-s-3xl w-full' />
           <div className='flex flex-col justify-between'>
-            <div className='flex flex-col space-y-8 p-8 overflow-y-auto'>
+            <div className='flex flex-col space-y-8 p-8'>
               <div className='flex justify-between items-center sticky top-0 bg-white z-10'>
                 <div className='text-2xl font-bold'>
                   <i className='fa-solid fa-arrow-up-from-bracket'></i>
@@ -94,9 +103,9 @@ export const InfoImage: React.FC = () => {
       <h1 className='my-8 text-center font-semibold text-2xl'>Thêm nội dung để khám phá</h1>
       <div className='columns-5'>
         {listImg &&
-          listImg.map((item: ImgProp) => {
+          listImg.map((item: ImgProp, index: number) => {
             return (
-              <NavLink to={`/info-img/${item.hinh_id}`} key={item.hinh_id}>
+              <NavLink to={`/info-img/${item.hinh_id}`} key={index}>
                 <img
                   loading='lazy'
                   src={item.duong_dan}

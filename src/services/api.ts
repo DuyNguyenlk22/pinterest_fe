@@ -29,3 +29,11 @@ export const register = (data: UserProps) => {
 export const login = (data: UserProps) => {
   return https.post("/auth/login", data)
 }
+
+export const imgSaved = (hinh_id: string | undefined) => {
+  return https.get(`/detail/get-img-is-saved/${hinh_id}`)
+}
+
+export const infoUser = () => {
+  return https.get("/manage/get-info-user")
+}

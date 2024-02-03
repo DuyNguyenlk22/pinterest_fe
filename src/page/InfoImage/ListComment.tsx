@@ -25,36 +25,44 @@ export const ListComment: React.FC = () => {
     getComment();
   }, [id]);
 
-  const handleRenderComment = () => {
-    return comment?.map((item) => {
-      return (
-        <div className='flex items-center space-x-4'>
-          <div>
-            <img src={item.nguoi_dung.anh_dai_dien} alt='...' className='rounded-full w-8 h-8' />
-          </div>
-          <div>
-            <div className='flex items-center'>
-              <h3 className='font-semibold mr-3'>{item.nguoi_dung.ho_ten}</h3>
-              <p>{item.noi_dung}</p>
+  const renderComment = () => {
+    if (comment?.length !== 0) {
+      return comment?.map((item) => {
+        return (
+          <div key={item.binh_luan_id} className='flex items-center space-x-4'>
+            <div>
+              <img src={item.nguoi_dung.anh_dai_dien} alt='...' className='rounded-full w-8 h-8' />
             </div>
-            <span className='text-gray-500 text-sm'>
-              {moment(item.ngay_binh_luan).startOf("weeks").fromNow()}
-            </span>
+            <div>
+              <div className='flex items-center'>
+                <h3 className='font-semibold mr-3'>{item.nguoi_dung.ho_ten}</h3>
+                <p>{item.noi_dung}</p>
+              </div>
+              <span className='text-gray-500 text-sm'>
+                {moment(item.ngay_binh_luan).startOf("weeks").fromNow()}
+              </span>
+            </div>
           </div>
-        </div>
+        );
+      });
+    } else {
+      return (
+        <h3 className='text-gray-400 mt-4'>
+          Chưa có nhận xét nào! Thêm nhận xét để bắt đầu cuộc trò chuyện.
+        </h3>
       );
-    });
+    }
   };
   const items: CollapseProps["items"] = [
     {
       key: "1",
       label: <p className='font-semibold'>Nhận xét</p>,
-      children: handleRenderComment(),
+      children: renderComment(),
     },
   ];
 
   return (
-    <div className='comment__list'>
+    <div className='comment__list h-48 overflow-y-auto'>
       <ConfigProvider
         theme={{
           components: {
@@ -68,17 +76,22 @@ export const ListComment: React.FC = () => {
           expandIconPosition='end'
           items={items}
           ghost
+          defaultActiveKey={"1"}
           expandIcon={(e) => {
             const { isActive } = e;
-            return (
-              <span>
-                {isActive ? (
-                  <i className='angle fa-solid fa-angle-up font-bold text-xl'></i>
-                ) : (
-                  <i className='angle fa-solid fa-angle-down font-bold text-xl'></i>
-                )}
-              </span>
-            );
+            if (comment) {
+              return (
+                <span>
+                  {isActive ? (
+                    <i className='angle fa-solid fa-angle-up font-bold text-xl'></i>
+                  ) : (
+                    <i className='angle fa-solid fa-angle-down font-bold text-xl'></i>
+                  )}
+                </span>
+              );
+            } else {
+              return "";
+            }
           }}
         />
       </ConfigProvider>

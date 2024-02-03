@@ -1,4 +1,5 @@
 import axios from "axios";
+import { localService } from "./localService";
 
 export const BASE_URL = "http://localhost:8080";
 
@@ -9,6 +10,6 @@ export const TOKEN =
 export const https = axios.create({
   baseURL: BASE_URL,
   headers: {
-    token: TOKEN,
+    token: localService.get()?.accessToken
   },
 });
