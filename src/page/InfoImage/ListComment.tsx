@@ -1,37 +1,27 @@
-import { useEffect, useState } from "react";
-import { getCommentImg } from "../../services/api";
-import { useParams } from "react-router-dom";
 import { CommentProps } from "../../model/commentInterface";
 import { Collapse, ConfigProvider, CollapseProps } from "antd";
 import moment from "moment";
-import { useDispatch } from "react-redux";
-import { setQuantity } from "../../redux/slice/commentSlice";
 
-export const ListComment: React.FC = () => {
-  const { id } = useParams<string>();
-  const dispatch = useDispatch();
-  const [comment, setComment] = useState<CommentProps[] | null>(null);
+interface Props {
+  comment: CommentProps[] | null;
+}
 
-  let getComment = async () => {
-    try {
-      let res = await getCommentImg(id);
-      setComment(res.data.content);
-      dispatch(setQuantity(res.data.content.length));
-    } catch (error: any) {
-      throw new Error(`${error.message}`);
-    }
-  };
-  useEffect(() => {
-    getComment();
-  }, [id]);
-
+export const ListComment: React.FC<Props> = ({ comment }) => {
   const renderComment = () => {
     if (comment?.length !== 0) {
       return comment?.map((item) => {
         return (
           <div key={item.binh_luan_id} className='flex items-center space-x-4'>
             <div>
-              <img src={item.nguoi_dung.anh_dai_dien} alt='...' className='rounded-full w-8 h-8' />
+              <img
+                src={
+                  item.nguoi_dung.anh_dai_dien === ""
+                    ? `https://i.pravatar.cc/150?u=${item.nguoi_dung.ho_ten}`
+                    : item.nguoi_dung.anh_dai_dien
+                }
+                alt='...'
+                className='rounded-full w-8 h-8'
+              />
             </div>
             <div>
               <div className='flex items-center'>

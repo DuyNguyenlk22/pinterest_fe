@@ -9,7 +9,7 @@ export const store = configureStore({
         searchImgSlice,
         listImgSlice,
         commentSlice,
-        userSlice
+        userSlice,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

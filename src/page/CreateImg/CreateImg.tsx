@@ -1,18 +1,46 @@
-import React from "react";
-import { Button, Form, Input } from "antd";
-import Dragger from "antd/es/upload/Dragger";
-
-const onFinish = (values: any) => {
-  console.log("Success:", values);
-};
+import React, { useState } from "react";
+import { Button, Form, Image, Input, message } from "antd";
+import { uploadImg } from "../../services/api";
 
 type FieldType = {
-  ten_hinh?: string;
+  ten_hinh: string;
   mo_ta?: string;
-  duong_dan?: string;
+  duong_dan: string;
 };
 
 export const CreateImg: React.FC = () => {
+  const [selectedImg, setSelectedImg] = useState<any>();
+  const [imgSrc, setImgSrc] = useState<string>();
+  const [form] = Form.useForm();
+  const handleChangeFile = (e: any) => {
+    let file = e.target.files[0];
+    setSelectedImg(file);
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (e: any) => {
+      setImgSrc(e.target.result);
+    };
+  };
+  const onFinish = async (values: any) => {
+    const formData = new FormData();
+    for (let key in values) {
+      if (key !== "duong_dan") {
+        formData.append(key, values[key]);
+      }
+    }
+    if (selectedImg) {
+      formData.append("duong_dan", selectedImg, selectedImg.name);
+    }
+    try {
+      let res = await uploadImg(formData);
+      message.success(res.data.message);
+      setSelectedImg(null);
+      setImgSrc("");
+      form.resetFields();
+    } catch (error: any) {
+      message.error(error.data.message);
+    }
+  };
   return (
     <div>
       <Form name='basic' onFinish={onFinish} autoComplete='off'>
@@ -29,29 +57,37 @@ export const CreateImg: React.FC = () => {
         </div>
         <div className='my-32 '>
           <div className='containerInfo flex justify-between items-center'>
-            <Dragger>
-              <div className='upload__img w-[380px] h-[420px] flex flex-col justify-between items-center px-4 space-y-7 rounded-3xl bg-[#E9E9E9]'>
-                <div></div>
-                <div className='text-center'>
-                  <i className='fa-solid fa-circle-up text-3xl'></i>
-                  <p>Chọn 1 tệp hoặc kéo và thả 1 tệp ở đây</p>
+            <Form.Item<FieldType> name='duong_dan'>
+              <input type='file' accept='image/*' required onChange={handleChangeFile} />
+              {selectedImg ? (
+                <Image
+                  preview={false}
+                  src={imgSrc}
+                  width={380}
+                  height={420}
+                  className='rounded-3xl'
+                />
+              ) : (
+                <div className='upload__img w-[380px] h-[420px] flex flex-col justify-between items-center px-4 space-y-7 rounded-3xl bg-[#E9E9E9]'>
+                  <div></div>
+                  <div className='text-center'>
+                    <i className='fa-solid fa-circle-up text-4xl'></i>
+                  </div>
+                  <div>
+                    <p className='text-center'>
+                      Bạn nên sử dụng tập tin .jpg chất lượng cao có kích thước dưới 10MB
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className='text-center'>
-                    Bạn nên sử dụng tập tin .jpg chất lượng cao có kích thước dưới 10MB
-                  </p>
-                </div>
-              </div>
-            </Dragger>
+              )}
+            </Form.Item>
+
             <div className='w-1/2'>
               <Form.Item<FieldType> label='Tiêu đề' name='ten_hinh'>
                 <Input />
               </Form.Item>
 
               <Form.Item<FieldType> label='Mô tả' name='mo_ta'>
-                <Input.TextArea />
-              </Form.Item>
-              <Form.Item<FieldType> label='Liên kết' name='duong_dan'>
                 <Input.TextArea />
               </Form.Item>
             </div>

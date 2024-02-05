@@ -8,6 +8,7 @@ const initialState: quantityState = {
     quantityCmt: 0
 }
 
+
 const commentSlice = createSlice({
     name: "allCommentImg",
     initialState,

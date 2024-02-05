@@ -55,7 +55,7 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <div className='py-2 px-4 sticky top-0 left-0 right-0 z-100 bg-white'>
+    <div className='py-2 px-4 sticky top-0 left-0 right-0 z-100 bg-white z-50'>
       <div className=' flex items-center h-14 space-x-3'>
         <NavLink to={"/"}>
           <img src='/img/icons-pinterest.png' alt='logo' className='w-[30px] h-[30px]' />

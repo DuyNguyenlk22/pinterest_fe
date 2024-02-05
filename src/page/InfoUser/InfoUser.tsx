@@ -5,9 +5,11 @@ import { infoUser } from "../../services/api";
 import { UserProps } from "../../model/userInterface";
 import type { TabsProps } from "antd";
 import { NavLink } from "react-router-dom";
+import { BASE_URL_IMG } from "../../services/config";
 
 export const InfoUser: React.FC = () => {
   let [info, setInfo] = useState<UserProps | null>(null);
+
   useEffect(() => {
     let getInfo = async () => {
       try {
@@ -26,9 +28,13 @@ export const InfoUser: React.FC = () => {
         return (
           <NavLink key={index} to={`/info-img/${item.hinh_id}`}>
             <img
-              src={item.hinh_anh.duong_dan}
+              src={
+                item.hinh_anh.duong_dan.includes(".com")
+                  ? `${item.hinh_anh.duong_dan}`
+                  : `${BASE_URL_IMG}/${item.hinh_anh.duong_dan}`
+              }
               alt={item.hinh_anh.mo_ta}
-              className='w-1/4 rounded-xl'
+              className='w-full rounded-xl'
             />
           </NavLink>
         );
@@ -52,7 +58,15 @@ export const InfoUser: React.FC = () => {
       return info?.hinh_anh.map((item, index) => {
         return (
           <NavLink key={index} to={`/info-img/${item.hinh_id}`}>
-            <img src={item.duong_dan} alt={item.mo_ta} className='w-1/4 rounded-xl' />
+            <img
+              src={
+                item.duong_dan.includes(".com")
+                  ? `${item.duong_dan}`
+                  : `${BASE_URL_IMG}/${item.duong_dan}`
+              }
+              alt={item.mo_ta}
+              className='w-full rounded-xl'
+            />
           </NavLink>
         );
       });
@@ -74,12 +88,12 @@ export const InfoUser: React.FC = () => {
     {
       key: "1",
       label: <p className='text-black font-semibold'>Đã tạo</p>,
-      children: <div className='columns-5 flex justify-center'>{handleRenderImgCreated()}</div>,
+      children: <div className='grid grid-cols-5 gap-4'>{handleRenderImgCreated()}</div>,
     },
     {
       key: "2",
       label: <p className='text-black font-semibold'>Đã lưu</p>,
-      children: <div className='columns-5 flex justify-center'>{handleRenderImgSaved()}</div>,
+      children: <div className='grid grid-cols-5 gap-4 '>{handleRenderImgSaved()}</div>,
     },
   ];
 

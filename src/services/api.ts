@@ -1,4 +1,3 @@
-import { CommentProps } from "../model/commentInterface";
 import { UserProps } from "../model/userInterface";
 import { https } from "./config";
 
@@ -18,7 +17,7 @@ export const getCommentImg = (hinh_id: string | undefined) => {
   return https.get(`/detail/get-img-comment/${hinh_id}`)
 }
 
-export const addComment = (data: CommentProps) => {
+export const addComment = (data: { hinh_id: string | number | undefined, noi_dung: string }) => {
   return https.post(`/detail/add-comment`, data)
 }
 
@@ -36,4 +35,8 @@ export const imgSaved = (hinh_id: string | undefined) => {
 
 export const infoUser = () => {
   return https.get("/manage/get-info-user")
+}
+
+export const uploadImg = (data: any) => {
+  return https.post("/addImg/upload-img", data)
 }
