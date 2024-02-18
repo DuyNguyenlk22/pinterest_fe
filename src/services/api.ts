@@ -37,6 +37,10 @@ export const infoUser = () => {
   return https.get("/manage/get-info-user")
 }
 
-export const uploadImg = (data: any) => {
+export const uploadImg = (data: FormData) => {
   return https.post("/addImg/upload-img", data)
+}
+
+export const updateInfo = (data: FormData) => {
+  return https.put("/personal/update-user-info", data)
 }

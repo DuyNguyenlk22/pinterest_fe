@@ -1,6 +1,7 @@
 import { CommentProps } from "../../model/commentInterface";
 import { Collapse, ConfigProvider, CollapseProps } from "antd";
 import moment from "moment";
+import { URL_IMG_AVA } from "../../services/config";
 
 interface Props {
   comment: CommentProps[] | null;
@@ -17,7 +18,7 @@ export const ListComment: React.FC<Props> = ({ comment }) => {
                 src={
                   item.nguoi_dung.anh_dai_dien === ""
                     ? `https://i.pravatar.cc/150?u=${item.nguoi_dung.ho_ten}`
-                    : item.nguoi_dung.anh_dai_dien
+                    : `${URL_IMG_AVA}/${item.nguoi_dung.anh_dai_dien}`
                 }
                 alt='...'
                 className='rounded-full w-8 h-8'
@@ -28,19 +29,13 @@ export const ListComment: React.FC<Props> = ({ comment }) => {
                 <h3 className='font-semibold mr-3'>{item.nguoi_dung.ho_ten}</h3>
                 <p>{item.noi_dung}</p>
               </div>
-              <span className='text-gray-500 text-sm'>
-                {moment(item.ngay_binh_luan).startOf("weeks").fromNow()}
-              </span>
+              <span className='text-gray-500 text-sm'>{moment(item.ngay_binh_luan).startOf("weeks").fromNow()}</span>
             </div>
           </div>
         );
       });
     } else {
-      return (
-        <h3 className='text-gray-400 mt-4'>
-          Chưa có nhận xét nào! Thêm nhận xét để bắt đầu cuộc trò chuyện.
-        </h3>
-      );
+      return <h3 className='text-gray-400 mt-4'>Chưa có nhận xét nào! Thêm nhận xét để bắt đầu cuộc trò chuyện.</h3>;
     }
   };
   const items: CollapseProps["items"] = [

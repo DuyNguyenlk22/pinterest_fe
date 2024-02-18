@@ -9,9 +9,10 @@ type FieldType = {
 };
 
 export const CreateImg: React.FC = () => {
-  const [selectedImg, setSelectedImg] = useState<any>();
+  const [selectedImg, setSelectedImg] = useState<any>(null);
   const [imgSrc, setImgSrc] = useState<string>();
   const [form] = Form.useForm();
+
   const handleChangeFile = (e: any) => {
     let file = e.target.files[0];
     setSelectedImg(file);
@@ -60,13 +61,7 @@ export const CreateImg: React.FC = () => {
             <Form.Item<FieldType> name='duong_dan'>
               <input type='file' accept='image/*' required onChange={handleChangeFile} />
               {selectedImg ? (
-                <Image
-                  preview={false}
-                  src={imgSrc}
-                  width={380}
-                  height={420}
-                  className='rounded-3xl'
-                />
+                <Image preview={false} src={imgSrc} width={380} height={420} className='rounded-3xl' />
               ) : (
                 <div className='upload__img w-[380px] h-[420px] flex flex-col justify-between items-center px-4 space-y-7 rounded-3xl bg-[#E9E9E9]'>
                   <div></div>
@@ -74,9 +69,7 @@ export const CreateImg: React.FC = () => {
                     <i className='fa-solid fa-circle-up text-4xl'></i>
                   </div>
                   <div>
-                    <p className='text-center'>
-                      Bạn nên sử dụng tập tin .jpg chất lượng cao có kích thước dưới 10MB
-                    </p>
+                    <p className='text-center'>Bạn nên sử dụng tập tin .jpg chất lượng cao có kích thước dưới 10MB</p>
                   </div>
                 </div>
               )}

@@ -21,14 +21,14 @@ export const Login: React.FC = () => {
     let handleLogin = async () => {
       try {
         let res = await login(values);
-        message.success("Đăng nhập thành công");
+        message.success(res.data.message);
         localService.set(res.data.content);
         dispatch(setInfo(res.data.content));
         setTimeout(() => {
           navigate("/");
         }, 2000);
-      } catch (error) {
-        console.log("😐 ~ handleLogin ~ error:👉", error);
+      } catch (error: any) {
+        message.error(error.response.data.message);
       }
     };
     handleLogin();

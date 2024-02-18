@@ -6,64 +6,33 @@ import { UserProps } from "../../model/userInterface";
 import type { TabsProps } from "antd";
 import { NavLink } from "react-router-dom";
 import { BASE_URL_IMG } from "../../services/config";
+import { useDispatch } from "react-redux";
+import { setInfoUser } from "../../redux/slice/infoUserSlice";
 
 export const InfoUser: React.FC = () => {
   let [info, setInfo] = useState<UserProps | null>(null);
-
+  console.log("😐 ~ info:👉", info);
+  const dispatch = useDispatch();
   useEffect(() => {
     let getInfo = async () => {
       try {
         let res = await infoUser();
         setInfo(res.data.content);
-      } catch (error) {
-        console.log("😐 ~ getInfo ~ error:👉", error);
+        dispatch(setInfoUser(res.data.content));
+      } catch (error: any) {
+        throw new Error(error.massage);
       }
     };
     getInfo();
   }, []);
 
-  const handleRenderImgSaved = () => {
-    if (info?.luu_anh) {
-      return info?.luu_anh.map((item, index) => {
-        return (
-          <NavLink key={index} to={`/info-img/${item.hinh_id}`}>
-            <img
-              src={
-                item.hinh_anh.duong_dan.includes(".com")
-                  ? `${item.hinh_anh.duong_dan}`
-                  : `${BASE_URL_IMG}/${item.hinh_anh.duong_dan}`
-              }
-              alt={item.hinh_anh.mo_ta}
-              className='w-full rounded-xl'
-            />
-          </NavLink>
-        );
-      });
-    } else {
-      return (
-        <div className='text-center mt-10'>
-          <h3>Bạn chưa lưu Ghim nào</h3>
-          <NavLink to={"/"}>
-            <p className='mt-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-black font-semibold duration-300 rounded-3xl'>
-              Tìm ý tưởng
-            </p>
-          </NavLink>
-        </div>
-      );
-    }
-  };
-
   const handleRenderImgCreated = () => {
-    if (info?.hinh_anh) {
+    if (info?.hinh_anh.length !== 0) {
       return info?.hinh_anh.map((item, index) => {
         return (
           <NavLink key={index} to={`/info-img/${item.hinh_id}`}>
             <img
-              src={
-                item.duong_dan.includes(".com")
-                  ? `${item.duong_dan}`
-                  : `${BASE_URL_IMG}/${item.duong_dan}`
-              }
+              src={item.duong_dan.includes(".com") ? `${item.duong_dan}` : `${BASE_URL_IMG}/${item.duong_dan}`}
               alt={item.mo_ta}
               className='w-full rounded-xl'
             />
@@ -84,16 +53,55 @@ export const InfoUser: React.FC = () => {
     }
   };
 
+  const handleRenderImgSaved = () => {
+    if (info?.luu_anh.length !== 0) {
+      return info?.luu_anh.map((item, index) => {
+        return (
+          <NavLink key={index} to={`/info-img/${item.hinh_id}`}>
+            <img
+              src={
+                item.hinh_anh.duong_dan.includes(".com")
+                  ? `${item.hinh_anh.duong_dan}`
+                  : `${BASE_URL_IMG}/${item.hinh_anh.duong_dan}`
+              }
+              alt={item.hinh_anh.mo_ta}
+              className='w-full rounded-xl'
+            />
+          </NavLink>
+        );
+      });
+    } else {
+      return (
+        <div className='text-center mt-10'>
+          <h3>Bạn chưa lưu Ghim nào</h3>
+          <NavLink to={"/"}>
+            <p className='mt-4 py-2 px-3 inline-block bg-gray-200 hover:bg-gray-300 hover:text-black font-semibold duration-300 rounded-3xl'>
+              Tìm ý tưởng
+            </p>
+          </NavLink>
+        </div>
+      );
+    }
+  };
+
   const items: TabsProps["items"] = [
     {
       key: "1",
       label: <p className='text-black font-semibold'>Đã tạo</p>,
-      children: <div className='grid grid-cols-5 gap-4'>{handleRenderImgCreated()}</div>,
+      children: (
+        <div className={info?.hinh_anh.length !== 0 ? "grid grid-cols-5 gap-4" : "flex justify-center items-center"}>
+          {handleRenderImgCreated()}
+        </div>
+      ),
     },
     {
       key: "2",
       label: <p className='text-black font-semibold'>Đã lưu</p>,
-      children: <div className='grid grid-cols-5 gap-4 '>{handleRenderImgSaved()}</div>,
+      children: (
+        <div className={info?.luu_anh.length !== 0 ? "grid grid-cols-5 gap-4" : "flex justify-center items-center"}>
+          {handleRenderImgSaved()}
+        </div>
+      ),
     },
   ];
 

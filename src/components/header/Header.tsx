@@ -55,14 +55,14 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <div className='py-2 px-4 sticky top-0 left-0 right-0 z-100 bg-white z-50'>
+    <div className='py-2 px-4 sticky top-0 left-0 right-0 z-[100] bg-white '>
       <div className=' flex items-center h-14 space-x-3'>
         <NavLink to={"/"}>
           <img src='/img/icons-pinterest.png' alt='logo' className='w-[30px] h-[30px]' />
         </NavLink>
-        <div className='bg-black text-white font-bold p-3 rounded-3xl'>
-          <NavLink to={"/"}>Trang chủ</NavLink>
-        </div>
+        <NavLink to={"/"}>
+          <div className='bg-black text-white font-bold p-3 rounded-3xl'>Trang chủ</div>
+        </NavLink>
         <div className='font-semibold'>
           <NavLink to={"/createImg"}>Tạo</NavLink>
         </div>
@@ -73,12 +73,7 @@ export const Header: React.FC = () => {
                 colorBgContainer: "#E1E1E1",
               },
             }}>
-            <Input
-              size='large'
-              placeholder='Tìm kiếm'
-              prefix={<SearchOutlined />}
-              onChange={handleChange}
-            />
+            <Input size='large' placeholder='Tìm kiếm' prefix={<SearchOutlined />} onChange={handleChange} />
           </ConfigProvider>
         </div>
         <div className='flex items-center space-x-4 w-[10rem] justify-end text-[#5F5F5F]'>
