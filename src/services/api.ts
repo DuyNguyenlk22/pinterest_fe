@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import { UserProps } from "../model/userInterface";
 import { https } from "./config";
 
@@ -45,6 +46,6 @@ export const updateInfo = (data: FormData) => {
   return https.put("/personal/update-user-info", data)
 }
 
-export const deleteImg = (data: any) => {
-  return https.delete("/manage/delete-img-created", data)
+export const deleteImg = (data: { hinh_id: number }): Promise<AxiosResponse<any>> => {
+  return https.delete("/manage/delete-img-created", { data })
 }

@@ -1,5 +1,5 @@
 import { UserOutlined } from "@ant-design/icons";
-import { Avatar, ConfigProvider, Tabs } from "antd";
+import { Avatar, ConfigProvider, Tabs, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { deleteImg, infoUser } from "../../services/api";
 import { UserProps } from "../../model/userInterface";
@@ -13,28 +13,28 @@ import "./infoUser.scss";
 export const InfoUser: React.FC = () => {
   let [info, setInfo] = useState<UserProps | null>(null);
   const dispatch = useDispatch();
-  useEffect(() => {
-    let getInfo = async () => {
-      try {
-        let res = await infoUser();
-        setInfo(res.data.content);
-        dispatch(setInfoUser(res.data.content));
-      } catch (error: any) {
-        throw new Error(error.massage);
-      }
-    };
-    getInfo();
-  }, []);
-  const handleDeleteImg = async (hinhId: number) => {
+  let getInfo = async () => {
     try {
-      let data = { hinh_id: hinhId };
-      let res = await deleteImg(data);
-      console.log("😐 ~ handleDeleteImg ~ res:👉", res);
+      let res = await infoUser();
+      setInfo(res.data.content);
+      dispatch(setInfoUser(res.data.content));
     } catch (error: any) {
-      console.log("😐 ~ handleDeleteImg ~ error:👉", error);
       throw new Error(error.massage);
     }
   };
+
+  const handleDeleteImg = async (hinhId: number) => {
+    try {
+      let res = await deleteImg({ hinh_id: hinhId });
+      getInfo();
+      message.success(res.data.message);
+    } catch (error: any) {
+      throw new Error(error.massage);
+    }
+  };
+  useEffect(() => {
+    getInfo();
+  }, [handleDeleteImg]);
 
   const handleRenderImgCreated = () => {
     if (info?.hinh_anh.length !== 0) {
