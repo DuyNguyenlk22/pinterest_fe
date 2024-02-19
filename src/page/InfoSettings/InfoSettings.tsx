@@ -1,11 +1,11 @@
-import { Avatar, Button, Input } from "antd";
+import { URL_IMG_AVA } from "../../services/config";
 import React, { useEffect, useState } from "react";
 import { UserOutlined } from "@ant-design/icons";
+import { updateInfo } from "../../services/api";
 import { categories } from "./dataCategories";
+import { Avatar, Button, Input } from "antd";
 import { Form, Image, message } from "antd";
 import { useSelector } from "react-redux";
-import { updateInfo } from "../../services/api";
-import { URL_IMG_AVA } from "../../services/config";
 
 const formItemLayout = {
   labelCol: {
@@ -27,9 +27,9 @@ export const InfoSettings: React.FC = () => {
       mat_khau: "",
       tuoi: info?.tuoi,
     });
-    if (imgSrc) {
-      setImgSrc(`${URL_IMG_AVA}/${info?.anh_dai_dien}`);
-    }
+    // if (imgSrc) {
+    setImgSrc(`${URL_IMG_AVA}/${info.anh_dai_dien}`);
+    // }
   }, [info, form]);
 
   const handleChangeFile = (e: any) => {
@@ -64,8 +64,8 @@ export const InfoSettings: React.FC = () => {
   };
 
   return (
-    <div className='flex justify-between mt-10 relative'>
-      <div className='w-[12%] ml-8 space-y-6 font-semibold '>
+    <div className='flex justify-center md:justify-between mt-10 relative'>
+      <div className='w-[12%] ml-8 space-y-6 font-semibold hidden md:block'>
         {categories.map((item, index) => {
           return (
             <h1 key={index} className={index === 0 ? `inline-block border-b-2 border-black` : ""}>

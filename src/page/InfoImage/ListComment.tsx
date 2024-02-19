@@ -16,11 +16,11 @@ export const ListComment: React.FC<Props> = ({ comment }) => {
             <div>
               <img
                 src={
-                  item.nguoi_dung.anh_dai_dien === ""
-                    ? `https://i.pravatar.cc/150?u=${item.nguoi_dung.ho_ten}`
+                  item.nguoi_dung.anh_dai_dien.includes("https")
+                    ? item.nguoi_dung.anh_dai_dien
                     : `${URL_IMG_AVA}/${item.nguoi_dung.anh_dai_dien}`
                 }
-                alt='...'
+                alt='avatar'
                 className='rounded-full w-8 h-8'
               />
             </div>
@@ -29,7 +29,7 @@ export const ListComment: React.FC<Props> = ({ comment }) => {
                 <h3 className='font-semibold mr-3'>{item.nguoi_dung.ho_ten}</h3>
                 <p>{item.noi_dung}</p>
               </div>
-              <span className='text-gray-500 text-sm'>{moment(item.ngay_binh_luan).startOf("weeks").fromNow()}</span>
+              <span className='text-gray-500 text-sm'>{moment(item.ngay_binh_luan).endOf("hour").fromNow()}</span>
             </div>
           </div>
         );

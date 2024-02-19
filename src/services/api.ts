@@ -44,3 +44,7 @@ export const uploadImg = (data: FormData) => {
 export const updateInfo = (data: FormData) => {
   return https.put("/personal/update-user-info", data)
 }
+
+export const deleteImg = (data: any) => {
+  return https.delete("/manage/delete-img-created", data)
+}

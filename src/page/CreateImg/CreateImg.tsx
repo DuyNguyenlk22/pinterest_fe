@@ -44,7 +44,7 @@ export const CreateImg: React.FC = () => {
   };
   return (
     <div>
-      <Form name='basic' onFinish={onFinish} autoComplete='off'>
+      <Form form={form} name='basic' onFinish={onFinish} autoComplete='off'>
         <div className='flex justify-between sticky top-[4.5rem] left-0 right-0 bg-white p-8 border-gray-300 border-2 z-50'>
           <h1 className='font-semibold text-[20px]'>Tạo Ghim</h1>
           <Form.Item style={{ marginBottom: "0px" }}>
@@ -56,14 +56,14 @@ export const CreateImg: React.FC = () => {
             </Button>
           </Form.Item>
         </div>
-        <div className='my-32 '>
-          <div className='containerInfo flex justify-between items-center'>
-            <Form.Item<FieldType> name='duong_dan'>
+        <div className='my-32'>
+          <div className='containerInfo flex justify-center lg:justify-between items-center flex-wrap lg:flex-nowrap'>
+            <Form.Item<FieldType> name='duong_dan' className='w-full lg:w-1/2'>
               <input type='file' accept='image/*' required onChange={handleChangeFile} />
               {selectedImg ? (
                 <Image preview={false} src={imgSrc} width={380} height={420} className='rounded-3xl' />
               ) : (
-                <div className='upload__img w-[380px] h-[420px] flex flex-col justify-between items-center px-4 space-y-7 rounded-3xl bg-[#E9E9E9]'>
+                <div className='upload__img w-full h-[250px] lg:w-[380px] lg:h-[420px] flex flex-col justify-between items-center px-4 space-y-7 rounded-3xl bg-[#E9E9E9]'>
                   <div></div>
                   <div className='text-center'>
                     <i className='fa-solid fa-circle-up text-4xl'></i>
@@ -75,7 +75,7 @@ export const CreateImg: React.FC = () => {
               )}
             </Form.Item>
 
-            <div className='w-1/2'>
+            <div className='w-full lg:w-1/2'>
               <Form.Item<FieldType> label='Tiêu đề' name='ten_hinh'>
                 <Input />
               </Form.Item>

@@ -1,17 +1,17 @@
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, ConfigProvider, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
-import { infoUser } from "../../services/api";
+import { deleteImg, infoUser } from "../../services/api";
 import { UserProps } from "../../model/userInterface";
 import type { TabsProps } from "antd";
 import { NavLink } from "react-router-dom";
-import { BASE_URL_IMG } from "../../services/config";
+import { BASE_URL_IMG, URL_IMG_AVA } from "../../services/config";
 import { useDispatch } from "react-redux";
 import { setInfoUser } from "../../redux/slice/infoUserSlice";
+import "./infoUser.scss";
 
 export const InfoUser: React.FC = () => {
   let [info, setInfo] = useState<UserProps | null>(null);
-  console.log("😐 ~ info:👉", info);
   const dispatch = useDispatch();
   useEffect(() => {
     let getInfo = async () => {
@@ -25,18 +25,37 @@ export const InfoUser: React.FC = () => {
     };
     getInfo();
   }, []);
+  const handleDeleteImg = async (hinhId: number) => {
+    try {
+      let data = { hinh_id: hinhId };
+      let res = await deleteImg(data);
+      console.log("😐 ~ handleDeleteImg ~ res:👉", res);
+    } catch (error: any) {
+      console.log("😐 ~ handleDeleteImg ~ error:👉", error);
+      throw new Error(error.massage);
+    }
+  };
 
   const handleRenderImgCreated = () => {
     if (info?.hinh_anh.length !== 0) {
       return info?.hinh_anh.map((item, index) => {
         return (
-          <NavLink key={index} to={`/info-img/${item.hinh_id}`}>
-            <img
-              src={item.duong_dan.includes(".com") ? `${item.duong_dan}` : `${BASE_URL_IMG}/${item.duong_dan}`}
-              alt={item.mo_ta}
-              className='w-full rounded-xl'
-            />
-          </NavLink>
+          <div className='imgCreated' key={index}>
+            <NavLink to={`/info-img/${item.hinh_id}`}>
+              <img
+                src={item.duong_dan.includes(".com") ? `${item.duong_dan}` : `${BASE_URL_IMG}/${item.duong_dan}`}
+                alt={item.mo_ta}
+                className='w-full rounded-xl'
+              />
+            </NavLink>
+            <button
+              onClick={() => {
+                handleDeleteImg(item.hinh_id);
+              }}
+              className='deleteBtn'>
+              Xoá
+            </button>
+          </div>
         );
       });
     } else {
@@ -108,7 +127,11 @@ export const InfoUser: React.FC = () => {
   return (
     <>
       <div className='flex flex-col items-center justify-center space-y-4'>
-        <Avatar size={120} icon={<UserOutlined />} />
+        {info?.anh_dai_dien ? (
+          <img src={`${URL_IMG_AVA}/${info.anh_dai_dien}`} alt='avatar' className='w-[120px] h-[120px] rounded-full' />
+        ) : (
+          <Avatar size={120} icon={<UserOutlined />} />
+        )}
         <h1 className='text-[36px]'>{info?.ho_ten}</h1>
         <p>
           <i className='fa-brands fa-pinterest mr-2'></i>

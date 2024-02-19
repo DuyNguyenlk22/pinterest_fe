@@ -1,34 +1,35 @@
-import React, { useEffect, useState } from "react";
-import { useParams, NavLink } from "react-router-dom";
 import { addComment, getDetailImg, imgSaved, getCommentImg } from "../../services/api";
 import { DetailImgProps, ImgProp } from "../../model/imageInterface";
-import { useDispatch, useSelector } from "react-redux";
-import { ThunkDispatch } from "@reduxjs/toolkit";
+import { CommentProps } from "../../model/commentInterface";
 import { getAllImg } from "../../redux/slice/listImgSlice";
+import { useParams, NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { BASE_URL_IMG, URL_IMG_AVA } from "../../services/config";
+import React, { useEffect, useState } from "react";
+import { ThunkDispatch } from "@reduxjs/toolkit";
 import { ListComment } from "./ListComment";
 import { Input } from "antd";
-import { BASE_URL_IMG } from "../../services/config";
-import { CommentProps } from "../../model/commentInterface";
 
 export const InfoImage: React.FC = () => {
-  const { id } = useParams<string>();
-  const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
-  const [value, setValue] = useState<string>("");
-  const [isSaved, setIsSaved] = useState<boolean>(false);
   const [infoImg, setInfoImg] = useState<DetailImgProps | null>(null);
   const [comment, setComment] = useState<CommentProps[] | null>(null);
   let { listImg } = useSelector((state: any) => state.listImgSlice);
+  let { infoUser } = useSelector((state: any) => state.userSlice);
+  const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
+  const [isSaved, setIsSaved] = useState<boolean>(false);
+  const [value, setValue] = useState<string>("");
+  const { id } = useParams<string>();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  let getComment = async () => {
+  const getComment = async () => {
     try {
       let res = await getCommentImg(id);
       setComment(res.data.content);
     } catch (error: any) {
-      throw new Error(`${error.message}`);
+      throw new Error(error.message);
     }
   };
 
@@ -37,7 +38,7 @@ export const InfoImage: React.FC = () => {
       let res = await getDetailImg(id);
       setInfoImg(res.data.content);
     } catch (error: any) {
-      throw new Error(`${error.message}`);
+      throw new Error(error.message);
     }
   };
   const getImgSaved = async () => {
@@ -45,7 +46,7 @@ export const InfoImage: React.FC = () => {
       let res = await imgSaved(id);
       setIsSaved(res.data.content);
     } catch (error: any) {
-      throw new Error(`${error.message}`);
+      throw new Error(error.message);
     }
   };
 
@@ -62,7 +63,7 @@ export const InfoImage: React.FC = () => {
         getComment();
       }
     } catch (error: any) {
-      throw new Error(error.response);
+      throw new Error(error.message);
     }
   };
 
@@ -75,8 +76,8 @@ export const InfoImage: React.FC = () => {
 
   return (
     <div className='my-10'>
-      <div className='containerInfo  rounded-3xl shadow-xl'>
-        <div className='grid grid-cols-2 '>
+      <div className='containerInfo rounded-3xl shadow-xl'>
+        <div className='grid grid-cols-1 lg:grid-cols-2'>
           <img
             src={infoImg?.duong_dan.includes(".com") ? infoImg?.duong_dan : `${BASE_URL_IMG}/${infoImg?.duong_dan}`}
             alt={infoImg?.duong_dan}
@@ -105,7 +106,15 @@ export const InfoImage: React.FC = () => {
               </div>
               <div className='flex items-center justify-between '>
                 <div className='flex items-center justify-between'>
-                  <img src={infoImg?.nguoi_dung.anh_dai_dien} alt='avatar' className='rounded-full w-10 h-10 mr-3' />
+                  <img
+                    src={
+                      infoImg?.nguoi_dung.anh_dai_dien.includes("https")
+                        ? infoImg?.nguoi_dung.anh_dai_dien
+                        : `${URL_IMG_AVA}/${infoImg?.nguoi_dung.anh_dai_dien}`
+                    }
+                    alt='avatar'
+                    className='rounded-full w-10 h-10 mr-3'
+                  />
                   <p>{infoImg?.nguoi_dung.ho_ten}</p>
                 </div>
                 <button className='px-4 py-3 font-semibold bg-slate-100 hover:bg-slate-200 duration-300 rounded-3xl'>
@@ -117,7 +126,7 @@ export const InfoImage: React.FC = () => {
             <div className='bg-white border-t-2 border-gray-100 p-8 sticky bottom-0 rounded-ee-3xl'>
               <p className='text-xl font-semibold'>{comment?.length} Nhận xét</p>
               <div className='flex space-x-3 mt-4'>
-                <img src={infoImg?.nguoi_dung.anh_dai_dien} alt='...' className='rounded-full w-10 h-10 ' />
+                <img src={`${URL_IMG_AVA}/${infoUser.anh_dai_dien}`} alt='...' className='rounded-full w-10 h-10 ' />
                 <form onSubmit={postComment} className='flex items-center w-full'>
                   <Input onChange={(e) => setValue(e.target.value)} value={value} placeholder='Thêm nhận xét' />
                   <button type='submit' className='ml-2'>
@@ -130,11 +139,16 @@ export const InfoImage: React.FC = () => {
         </div>
       </div>
       <h1 className='my-8 text-center font-semibold text-2xl'>Thêm nội dung để khám phá</h1>
-      <div className='columns-5'>
+      <div className='columns-2 md:columns-3 lg:columns-5'>
         {listImg &&
           listImg.map((item: ImgProp, index: number) => {
             return (
-              <NavLink to={`/info-img/${item.hinh_id}`} key={index}>
+              <NavLink
+                onClick={() => {
+                  window.scrollTo(0, 0);
+                }}
+                to={`/info-img/${item.hinh_id}`}
+                key={index}>
                 <img
                   loading='lazy'
                   src={item.duong_dan.includes(".com") ? item.duong_dan : `${BASE_URL_IMG}/${item.duong_dan}`}

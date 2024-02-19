@@ -1,12 +1,12 @@
+import { getAllImg } from "../../redux/slice/listImgSlice";
+import { localService } from "../../services/localService";
+import { useDispatch, useSelector } from "react-redux";
+import { ImgProp } from "../../model/imageInterface";
+import { BASE_URL_IMG } from "../../services/config";
+import { ThunkDispatch } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { Skeleton } from "antd";
-import { ImgProp } from "../../model/imageInterface";
-import { getAllImg } from "../../redux/slice/listImgSlice";
-import { ThunkDispatch } from "@reduxjs/toolkit";
-import { localService } from "../../services/localService";
-import { BASE_URL_IMG } from "../../services/config";
 
 const HomePage: React.FC = () => {
   useEffect(() => {
@@ -29,7 +29,7 @@ const HomePage: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <div className='columns-5'>
+    <div className='columns-2 md:columns-3 lg:columns-5'>
       {loading
         ? Array.from({ length: 50 }, (_, index: number) => {
             return <Skeleton active key={index} />;
@@ -39,11 +39,7 @@ const HomePage: React.FC = () => {
               <NavLink to={`/info-img/${item.hinh_id}`} key={item.hinh_id}>
                 <img
                   loading='lazy'
-                  src={
-                    item.duong_dan.includes(".com")
-                      ? item.duong_dan
-                      : `${BASE_URL_IMG}/${item.duong_dan}`
-                  }
+                  src={item.duong_dan.includes(".com") ? item.duong_dan : `${BASE_URL_IMG}/${item.duong_dan}`}
                   alt={item.ten_hinh}
                   className='p-2 w-full rounded-2xl'
                 />
