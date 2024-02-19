@@ -1,7 +1,7 @@
-import React from "react";
+import { useNavigate, NavLink } from "react-router-dom";
 import { Button, Form, Input, message } from "antd";
 import { register } from "../../services/api";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 
 const formItemLayout = {
   labelCol: {
@@ -103,6 +103,14 @@ export const Register: React.FC = () => {
               Continue
             </Button>
           </Form.Item>
+          <div className='text-center'>
+            <p>
+              If you already have an account, click{" "}
+              <NavLink className='text-blue-400 hover:text-blue-600' to={"/auth/login"}>
+                HERE
+              </NavLink>
+            </p>
+          </div>
         </Form>
       </div>
     </section>

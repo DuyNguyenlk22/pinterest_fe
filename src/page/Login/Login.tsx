@@ -1,10 +1,11 @@
-import React from "react";
-import { Button, Form, Input, message } from "antd";
-import { useNavigate } from "react-router-dom";
-import { login } from "../../services/api";
 import { localService } from "../../services/localService";
-import { useDispatch } from "react-redux";
+import { NavLink, useNavigate } from "react-router-dom";
 import { setInfo } from "../../redux/slice/userSlice";
+import { Button, Form, Input, message } from "antd";
+import { login } from "../../services/api";
+import { useDispatch } from "react-redux";
+import React from "react";
+
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -90,6 +91,14 @@ export const Login: React.FC = () => {
               Log In
             </Button>
           </Form.Item>
+          <div className='text-center'>
+            <p>
+              If you haven't asigned yet, click{" "}
+              <NavLink className='text-blue-400 hover:text-blue-600' to={"/auth/register"}>
+                HERE
+              </NavLink>
+            </p>
+          </div>
         </Form>
       </div>
     </section>
