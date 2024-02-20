@@ -15,6 +15,7 @@ export const ListComment: React.FC<Props> = ({ comment }) => {
           <div key={item.binh_luan_id} className='flex items-center space-x-4'>
             <div>
               <img
+                loading='lazy'
                 src={
                   item.nguoi_dung.anh_dai_dien.includes("https")
                     ? item.nguoi_dung.anh_dai_dien

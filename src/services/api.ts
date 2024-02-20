@@ -49,3 +49,7 @@ export const updateInfo = (data: FormData) => {
 export const deleteImg = (data: { hinh_id: number }): Promise<AxiosResponse<any>> => {
   return https.delete("/manage/delete-img-created", { data })
 }
+
+export const isSavedImg = (data: { hinh_id: number | undefined }): Promise<AxiosResponse<any>> => {
+  return https.post("/detail/isSaveImg", data)
+}

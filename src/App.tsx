@@ -1,14 +1,14 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import React from "react";
+import { InfoSettings } from "./page/InfoSettings/InfoSettings";
+import { InfoImage } from "./page/InfoImage/InfoImage";
+import { CreateImg } from "./page/CreateImg/CreateImg";
+import { Register } from "./page/Register/Register";
+import { InfoUser } from "./page/InfoUser/InfoUser";
 import HomePage from "./page/Home/HomePage";
 import { Layout } from "./template/Layout";
-import { InfoImage } from "./page/InfoImage/InfoImage";
 import { Login } from "./page/Login/Login";
-import { Register } from "./page/Register/Register";
-import { CreateImg } from "./page/CreateImg/CreateImg";
-import { InfoUser } from "./page/InfoUser/InfoUser";
+import React from "react";
 import "./App.scss";
-import { InfoSettings } from "./page/InfoSettings/InfoSettings";
 
 interface dataProps {
   path: string;

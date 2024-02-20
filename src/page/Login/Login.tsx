@@ -12,6 +12,10 @@ const formItemLayout = {
     sm: { span: 24 },
   },
 };
+type FieldType = {
+  email: string;
+  mat_khau: string;
+};
 
 export const Login: React.FC = () => {
   const [form] = Form.useForm();
@@ -37,7 +41,7 @@ export const Login: React.FC = () => {
   return (
     <section className='register flex items-center justify-center h-screen'>
       <div className='overlay fixed top-0 left-0 bottom-0 right-0 h-screen w-screen bg-[#00000080] z-[-1]'></div>
-      <div className='flex flex-col items-center space-y-4 bg-white rounded-3xl shadow-2xl p-5 w-[30%]'>
+      <div className='flex flex-col items-center space-y-4 bg-white rounded-3xl shadow-2xl p-5 w-[95%] md:w-[75%] lg:w-[30%]'>
         <img src='../../../public/img/icons-pinterest.png' alt='logo' className='w-10' />
         <div className='text-center'>
           <h1 className='text-[32px] font-semibold text-[#333333]'>Welcome to Pinterest</h1>
@@ -50,7 +54,7 @@ export const Login: React.FC = () => {
           style={{ maxWidth: 600 }}
           scrollToFirstError
           labelAlign='left'>
-          <Form.Item
+          <Form.Item<FieldType>
             name='email'
             label='E-mail'
             rules={[
@@ -66,7 +70,7 @@ export const Login: React.FC = () => {
             <Input placeholder='Email' />
           </Form.Item>
 
-          <Form.Item
+          <Form.Item<FieldType>
             name='mat_khau'
             label='Password'
             rules={[

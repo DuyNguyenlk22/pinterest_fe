@@ -13,6 +13,12 @@ const formItemLayout = {
     sm: { span: 24 },
   },
 };
+type FieldType = {
+  email: string;
+  mat_khau: string;
+  ho_ten: string;
+  tuoi: number;
+};
 
 export const InfoSettings: React.FC = () => {
   let { info } = useSelector((state: any) => state.infoUserSlice);
@@ -27,9 +33,7 @@ export const InfoSettings: React.FC = () => {
       mat_khau: "",
       tuoi: info?.tuoi,
     });
-    // if (imgSrc) {
     setImgSrc(`${URL_IMG_AVA}/${info.anh_dai_dien}`);
-    // }
   }, [info, form]);
 
   const handleChangeFile = (e: any) => {
@@ -115,7 +119,7 @@ export const InfoSettings: React.FC = () => {
               </div>
             </Form.Item>
 
-            <Form.Item
+            <Form.Item<FieldType>
               name='email'
               label='E-mail'
               rules={[
@@ -130,7 +134,7 @@ export const InfoSettings: React.FC = () => {
               ]}>
               <Input disabled />
             </Form.Item>
-            <Form.Item
+            <Form.Item<FieldType>
               name='mat_khau'
               label='Password'
               rules={[
@@ -142,11 +146,11 @@ export const InfoSettings: React.FC = () => {
               <Input.Password placeholder='Please input your new password if you want to change' />
             </Form.Item>
 
-            <Form.Item name='ho_ten' label='Nickname' rules={[{ required: true }]}>
+            <Form.Item<FieldType> name='ho_ten' label='Nickname' rules={[{ required: true }]}>
               <Input />
             </Form.Item>
 
-            <Form.Item name='tuoi' label='Age' rules={[{ required: true }]}>
+            <Form.Item<FieldType> name='tuoi' label='Age' rules={[{ required: true }]}>
               <Input />
             </Form.Item>
 

@@ -1,18 +1,19 @@
-import { UserOutlined } from "@ant-design/icons";
+import { BASE_URL_IMG, URL_IMG_AVA } from "../../services/config";
+import { setInfoUser } from "../../redux/slice/infoUserSlice";
 import { Avatar, ConfigProvider, Tabs, message } from "antd";
-import React, { useEffect, useState } from "react";
 import { deleteImg, infoUser } from "../../services/api";
 import { UserProps } from "../../model/userInterface";
-import type { TabsProps } from "antd";
+import React, { useEffect, useState } from "react";
+import { UserOutlined } from "@ant-design/icons";
 import { NavLink } from "react-router-dom";
-import { BASE_URL_IMG, URL_IMG_AVA } from "../../services/config";
 import { useDispatch } from "react-redux";
-import { setInfoUser } from "../../redux/slice/infoUserSlice";
+import type { TabsProps } from "antd";
 import "./infoUser.scss";
 
 export const InfoUser: React.FC = () => {
   let [info, setInfo] = useState<UserProps | null>(null);
   const dispatch = useDispatch();
+
   let getInfo = async () => {
     try {
       let res = await infoUser();
@@ -32,10 +33,12 @@ export const InfoUser: React.FC = () => {
       throw new Error(error.massage);
     }
   };
+
   useEffect(() => {
     getInfo();
   }, [handleDeleteImg]);
 
+  //* render list img đã tạo
   const handleRenderImgCreated = () => {
     if (info?.hinh_anh.length !== 0) {
       return info?.hinh_anh.map((item, index) => {
@@ -43,6 +46,7 @@ export const InfoUser: React.FC = () => {
           <div className='imgCreated' key={index}>
             <NavLink to={`/info-img/${item.hinh_id}`}>
               <img
+                loading='lazy'
                 src={item.duong_dan.includes(".com") ? `${item.duong_dan}` : `${BASE_URL_IMG}/${item.duong_dan}`}
                 alt={item.mo_ta}
                 className='w-full rounded-xl'
@@ -72,12 +76,14 @@ export const InfoUser: React.FC = () => {
     }
   };
 
+  //* render list img đã lưu
   const handleRenderImgSaved = () => {
     if (info?.luu_anh.length !== 0) {
       return info?.luu_anh.map((item, index) => {
         return (
           <NavLink key={index} to={`/info-img/${item.hinh_id}`}>
             <img
+              loading='lazy'
               src={
                 item.hinh_anh.duong_dan.includes(".com")
                   ? `${item.hinh_anh.duong_dan}`
@@ -125,10 +131,15 @@ export const InfoUser: React.FC = () => {
   ];
 
   return (
-    <>
+    <section id='infoUser'>
       <div className='flex flex-col items-center justify-center space-y-4'>
         {info?.anh_dai_dien ? (
-          <img src={`${URL_IMG_AVA}/${info.anh_dai_dien}`} alt='avatar' className='w-[120px] h-[120px] rounded-full' />
+          <img
+            loading='lazy'
+            src={`${URL_IMG_AVA}/${info.anh_dai_dien}`}
+            alt='avatar'
+            className='w-[120px] h-[120px] rounded-full'
+          />
         ) : (
           <Avatar size={120} icon={<UserOutlined />} />
         )}
@@ -160,6 +171,6 @@ export const InfoUser: React.FC = () => {
           <Tabs centered defaultActiveKey='2' items={items} />
         </ConfigProvider>
       </div>
-    </>
+    </section>
   );
 };

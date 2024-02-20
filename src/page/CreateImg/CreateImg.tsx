@@ -43,7 +43,7 @@ export const CreateImg: React.FC = () => {
     }
   };
   return (
-    <div>
+    <section id='createImg'>
       <Form form={form} name='basic' onFinish={onFinish} autoComplete='off'>
         <div className='flex justify-between sticky top-[4.5rem] left-0 right-0 bg-white p-8 border-gray-300 border-2 z-50'>
           <h1 className='font-semibold text-[20px]'>Tạo Ghim</h1>
@@ -87,6 +87,6 @@ export const CreateImg: React.FC = () => {
           </div>
         </div>
       </Form>
-    </div>
+    </section>
   );
 };

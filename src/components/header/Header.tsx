@@ -13,6 +13,7 @@ export const Header: React.FC = () => {
   const navigate = useNavigate();
   const [isMobileWidth, setIsMobileWidth] = useState(window.innerWidth > 992);
   let { infoUser } = useSelector((state: any) => state.userSlice);
+
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     navigate("/");
     dispatch(getImgSearch(e.target.value));
@@ -33,8 +34,8 @@ export const Header: React.FC = () => {
           <p>Đang đăng nhập</p>
           <div className='flex items-center mt-3'>
             <div className='w-8 h-8 rounded-full mr-3'>
-              {infoUser.anh_dai_dien ? (
-                <img src={`${URL_IMG_AVA}/${infoUser.anh_dai_dien}`} alt='avatar' className='w-8 h-8 rounded-full' />
+              {infoUser?.anh_dai_dien ? (
+                <img src={`${URL_IMG_AVA}/${infoUser?.anh_dai_dien}`} alt='avatar' className='w-8 h-8 rounded-full' />
               ) : (
                 <Avatar size={30} icon={<UserOutlined />} />
               )}
@@ -58,10 +59,9 @@ export const Header: React.FC = () => {
           className='text-semibold w-full'
           onClick={() => {
             localService.remove();
-            window.location.reload();
             setTimeout(() => {
               navigate("/auth/login");
-            }, 1500);
+            }, 1200);
           }}>
           Đăng xuất
         </button>
@@ -71,7 +71,7 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <div className='py-2 px-4 sticky top-0 left-0 right-0 z-[100] bg-white '>
+    <section id='header' className='py-2 px-4 sticky top-0 left-0 right-0 z-[100] bg-white '>
       <div>
         {isMobileWidth ? (
           <div className='flex items-center h-14 space-x-3'>
@@ -98,8 +98,8 @@ export const Header: React.FC = () => {
               <i className='fa-solid fa-bell w-6 text-2xl '></i>
               <i className='fa-solid fa-comment-dots w-6 text-2xl'></i>
               <NavLink to={"/personal"}>
-                {infoUser.anh_dai_dien ? (
-                  <img src={`${URL_IMG_AVA}/${infoUser.anh_dai_dien}`} alt='avatar' className='w-8 h-8 rounded-full' />
+                {infoUser?.anh_dai_dien ? (
+                  <img src={`${URL_IMG_AVA}/${infoUser?.anh_dai_dien}`} alt='avatar' className='w-8 h-8 rounded-full' />
                 ) : (
                   <Avatar size={30} icon={<UserOutlined />} />
                 )}
@@ -134,13 +134,13 @@ export const Header: React.FC = () => {
               <i className='fa-solid fa-bell w-6 text-2xl '></i>
               <i className='fa-solid fa-comment-dots w-6 text-2xl'></i>
               <NavLink to={"/personal"}>
-                {infoUser.anh_dai_dien ? (
-                  <img src={`${URL_IMG_AVA}/${infoUser.anh_dai_dien}`} alt='avatar' className='w-8 h-8 rounded-full' />
+                {infoUser?.anh_dai_dien ? (
+                  <img src={`${URL_IMG_AVA}/${infoUser?.anh_dai_dien}`} alt='avatar' className='w-8 h-8 rounded-full' />
                 ) : (
                   <Avatar size={30} icon={<UserOutlined />} />
                 )}
               </NavLink>
-              <button>
+              <p className='cursor-pointer'>
                 <Tooltip placement='bottom' title={<p>Tài khoản và các tuỳ chọn khác</p>}>
                   <Dropdown menu={{ items }} trigger={["click"]}>
                     <button onClick={(e) => e.preventDefault()}>
@@ -148,11 +148,11 @@ export const Header: React.FC = () => {
                     </button>
                   </Dropdown>
                 </Tooltip>
-              </button>
+              </p>
             </div>
           </div>
         )}
       </div>
-    </div>
+    </section>
   );
 };
