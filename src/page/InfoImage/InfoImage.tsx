@@ -47,7 +47,9 @@ export const InfoImage: React.FC = () => {
       let res = await imgSaved(id);
       setIsSaved(res.data.content);
     } catch (error: any) {
-      throw new Error(error.response.data.message);
+      if (error.response.data.message === "UnSaved") {
+        setIsSaved(error.response.data.content);
+      }
     }
   };
 
